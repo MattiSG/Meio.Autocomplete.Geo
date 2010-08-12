@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+	<head>
+		<title>Meio.Autocomplete.Geo demo</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="author" content="Matti Schneider-Ghibaudo"/>
+		<script language="javascript" type="text/javascript" src="../Assets/mootools-1.2.4-core.js"></script>
+		<script language="javascript" type="text/javascript" src="../Assets/mootools-1.2.4.4-more.js"></script>
+		<script language="javascript" type="text/javascript" src="../Assets/BGIframe.js"></script>
+		<script language="javascript" type="text/javascript" src="../Assets/Meio.Autocomplete.js"></script>
+		<script language="javascript" type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&language=fr&indexing=false"></script>
+		<script language="javascript" type="text/javascript" src="../Source/Meio.Autocomplete.Geo.js"></script>
+	</head>
+	<body>
+		<h1>Meio.Autocomplete.Geo demo</h1>
+			
+		<form action="#" method="post">
+			<ul>
+				<li>
+					<label for="asso_school">Établissement de rattachement</label>
+					<input type="text" name="asso[school]" id="asso_school" />
+				</li>
+				<li>
+					<label for="asso_name">Nom de l'association</label>
+					<input type="text" name="asso[name]" id="asso_name" />
+				</li>
+				<li>
+					<label for="asso_town">Ville</label>
+					<input type="text" name="asso[town]" id="asso_town" />
+				</li>
+				<li>
+					<label for="asso_is_not_shared">Je refuse que mon association participe aux statistiques nationales</label>
+					<input type="checkbox" name="asso[is_not_shared]" id="asso_is_not_shared" />
+				</li>
+				<li>
+					<label for="asso_category">Type de campus</label>
+					<select name="asso[category]" id="asso_category">
+				<option value="urbain">urbain</option>
+				<option value="péri-urbain">péri-urbain</option>
+				<option value="extra-urbain">extra-urbain</option>
+				</select>
+				<input type="hidden" name="asso[latitude]" id="asso_latitude" />
+				<input type="hidden" name="asso[longitude]" id="asso_longitude" />
+				<input type="hidden" name="asso[id]" id="asso_id" />
+				<input type="hidden" name="asso[_csrf_token]" value="49f7d9ad0508f7ece2c94de7e87d3c22" id="asso__csrf_token" /></li>
+				 <!-- TODO: rendre latitude/longitude obligatoire avec explication, traduire "required" -->
+			</ul>
+			<input type="submit" value="Enregistrer" />
+		</form>
+		
+		<script type="text/javascript">
+		//<![CDATA[
+			new Meio.Autocomplete.Geo('asso_school', ['test', 'test2']);
+		//]]>
+		</script>
+	</body>
+</html>
