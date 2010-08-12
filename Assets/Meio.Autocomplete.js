@@ -855,7 +855,7 @@ provides: [Meio.Autocomplete]
 					self.element.removeClass('loading');
 				},
 				success: function(jsonResponse){
-					self.data = self.options.formatResponse(jsonResponse);
+					self.data = self.options.formatResponse(jsonResponse); //TODO: use cache? or is it stored somewhere else?
 					self.fireEvent('ready');
 				}
 			});
