@@ -17,40 +17,27 @@
 		<form action="#" method="post">
 			<ul>
 				<li>
-					<label for="asso_school">Établissement de rattachement</label>
-					<input type="text" name="asso[school]" id="asso_school" />
+					<label for="form_school">Establishment</label>
+					<input type="text" name="form[school]" id="form_school" />
 				</li>
 				<li>
-					<label for="asso_name">Nom de l'association</label>
-					<input type="text" name="asso[name]" id="asso_name" />
+					<label for="form_town">Town</label>
+					<input type="text" name="form[town]" id="form_town" />
 				</li>
 				<li>
-					<label for="asso_town">Ville</label>
-					<input type="text" name="asso[town]" id="asso_town" />
-				</li>
-				<li>
-					<label for="asso_is_not_shared">Je refuse que mon association participe aux statistiques nationales</label>
-					<input type="checkbox" name="asso[is_not_shared]" id="asso_is_not_shared" />
-				</li>
-				<li>
-					<label for="asso_category">Type de campus</label>
-					<select name="asso[category]" id="asso_category">
-				<option value="urbain">urbain</option>
-				<option value="péri-urbain">péri-urbain</option>
-				<option value="extra-urbain">extra-urbain</option>
+					<label for="form_category">Environnement</label>
+					<select name="form[category]" id="form_category">
+				<option value="urban">urban</option>
+				<option value="péri-urban">peri-urban</option>
+				<option value="extra-urban">extra-urban</option>
 				</select>
-				<input type="hidden" name="asso[latitude]" id="asso_latitude" />
-				<input type="hidden" name="asso[longitude]" id="asso_longitude" />
-				<input type="hidden" name="asso[id]" id="asso_id" />
-				<input type="hidden" name="asso[_csrf_token]" value="49f7d9ad0508f7ece2c94de7e87d3c22" id="asso__csrf_token" /></li>
-				 <!-- TODO: rendre latitude/longitude obligatoire avec explication, traduire "required" -->
 			</ul>
 			<input type="submit" value="Enregistrer" />
 		</form>
 		
 		<script type="text/javascript">
 		//<![CDATA[
-			new Meio.Autocomplete.Geo('asso_school', ['test', 'test2']);
+			new Meio.Autocomplete.Geo('form_school', ['test', 'test2']);
 		//]]>
 		</script>
 	</body>

@@ -44,7 +44,6 @@ Meio.Autocomplete.Data.Geo = new Class({
 Meio.Autocomplete.Geo = new Class({
 	Extends: Meio.Autocomplete,
 	
-
 	options: {
 		filter: {
 			path: 'formatted_address'
