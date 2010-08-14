@@ -23,16 +23,25 @@
 					<input type="text" name="form[school]" id="form_school" />
 				</li>
 				<li>
-					<label for="form_town">Town</label>
-					<input type="text" name="form[town]" id="form_town" />
+					<label for="form_city">City</label>
+					<input type="text" name="form[city]" id="form_city" />
 				</li>
 				<li>
-					<label for="form_category">Environnement</label>
+					<label for="form_lat">Latitude</label>
+					<input type="text" name="form[lat]" id="form_lat" />
+				</li>
+				<li>
+					<label for="form_lng">Longitude</label>
+					<input type="text" name="form[lng]" id="form_lng" />
+				</li>
+				<li>
+					<label for="form_category">Environment</label>
 					<select name="form[category]" id="form_category">
-				<option value="urban">urban</option>
-				<option value="péri-urban">peri-urban</option>
-				<option value="extra-urban">extra-urban</option>
-				</select>
+						<option value="urban">urban</option>
+						<option value="péri-urban">peri-urban</option>
+						<option value="extra-urban">extra-urban</option>
+					</select>
+				</li>
 			</ul>
 			<input type="submit" value="Enregistrer" />
 		</form>
@@ -43,7 +52,12 @@
 				region: 'fr',
 				location: new google.maps.LatLng(43.62028086118892, 7.043044841527948)
 			}, {
-				delay: 100
+				delay: 100,
+				onSelect: function(elements, value) {
+					['lat', 'lng', 'city'].each(function(prop) {
+						$('form_' + prop).set('value', value[prop].toLowerCase().capitalize());
+					});
+				}
 			});
 		//]]>
 		</script>
