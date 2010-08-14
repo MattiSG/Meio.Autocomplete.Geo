@@ -1,4 +1,4 @@
-Meio.Autocomplete.Geo - Copyright (c) 2010 Matti Schneider-Ghibaudo
+Meio.Autocomplete.Geo by Matti Schneider-Ghibaudo
 ========================================================================
 
 Meio.Autocomplete.Geo - a MooTools plugin based on Meio.Autocomplete that autocompletes a field with Google Local Search results and allows you to retrieve latitude, longitude, city and other info from the user's selection.

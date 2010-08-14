@@ -15,6 +15,7 @@ Meio.Autocomplete.Data.Geo = new Class({
 	Extends: Meio.Autocomplete.Data,
 	
 	localSearch: new GlocalSearch(),
+	geocoderReqOpts: {},
 	
 	/**
 	*@param	geocoderReqOpts	a Hash that may include the following values:
@@ -22,12 +23,12 @@ Meio.Autocomplete.Data.Geo = new Class({
 	*/
 	initialize: function init(geocoderReqOpts) {
 		this._cache = new Meio.Autocomplete.Cache();
-		this.geocoderReqOpts = geocoderReqOpts; //we can't use Options because they change the prototype
+		this.setLocation(geocoderReqOpts.location || ''); //we can't use Options because they change the prototype
 		this.localSearch.setSearchCompleteCallback(null, this.handleResults.bind(this));
 	},
 	
 	setLocation: function setLocation(loc) {
-		this.geocoderReqOpts.location = loc;
+		this.geocoderReqOpts.location = loc || '';
 	},
 	
 	prepare: function prepare(text){
