@@ -643,7 +643,7 @@ provides: [Meio.Autocomplete]
 			var node = listChildren[maxVisibleItems - 1] || (listChildren.length ? listChildren[listChildren.length - 1] : null);
 			if (!node) return;
 			node = $(node);
-			// uggly hack to fix the height of the autocomplete list
+			// ugly hack to fix the height of the autocomplete list
 			// TODO rethink about it
 			for (var i = 2; i--;) this.node.setStyle('height', node.getCoordinates(this.list).bottom);
 		},
@@ -660,7 +660,7 @@ provides: [Meio.Autocomplete]
 		mousedown: function(e){
 			e.preventDefault();
 			this.shouldNotBlur = true;
-			if (!(this.focusedItem = this.getItemFromEvent(e))){
+			if (this.focusedItem != this.getItemFromEvent(e)){
 				e.dontHide = true;
 				return true;
 			} 
