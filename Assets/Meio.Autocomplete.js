@@ -4,6 +4,7 @@ description: A plugin for enabling autocomplete of a text input or textarea.
 
 authors:
  - Fábio Miranda Costa
+ - Matti Schneider-Ghibaudo
 
 requires:
  - core/1.2.4: [Class.Extras, Element.Event, Element.Style]
@@ -72,8 +73,8 @@ provides: [Meio.Autocomplete]
 			this.elements[name] = obj;
 		},
 		
-		addEventToElement: function(name, eventName, event){
-			this.elements[name].addEvent(eventName, event.bindWithEvent(this));
+		addEventToElement: function(name, eventName, event, bind){
+			this.elements[name].addEvent(eventName, event.bindWithEvent(bind || this));
 		},
 		
 		addEventsToElement: function(name, events){
@@ -118,7 +119,7 @@ provides: [Meio.Autocomplete]
 			
 			filter: {
 				/*
-					its posible to pass the filters directly or by passing a type and optionaly a path.
+					It is possible to pass the filters directly or by passing a type and optionally a path.
 					
 					filter: function(text, data){}
 					formatMatch: function(text, data, i){}
@@ -234,6 +235,11 @@ provides: [Meio.Autocomplete]
 					if (this.active && !e.dontHide) this.setInputValue();
 				}
 			});
+			this.addEventToElement('list', 'focusItem', function(item) {
+				if (! this.elements.list.focusedItem) return;
+				var index = this.elements.list.focusedItem.get('data-index');
+				this.fireEvent('highlight', [this.elements, (item ? this.itemsData[index] : null)]);
+			}, this);
 		},
 		
 		update: function(){
@@ -682,6 +688,8 @@ provides: [Meio.Autocomplete]
 					this.focusedItem = newFocusedItem;
 				}
 			}
+			if (newFocusedItem)
+				this.fireEvent('focusItem', [newFocusedItem]);
 		},
 		
 		scrollFocusedItem: function(direction){
@@ -723,6 +731,7 @@ provides: [Meio.Autocomplete]
 		hide: function(){
 			this.showing = false;
 			this.node.setStyle('visibility', 'hidden');
+			this.fireEvent('focusItem', null);
 		}
 		
 	});

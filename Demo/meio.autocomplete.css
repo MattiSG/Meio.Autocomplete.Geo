@@ -5,13 +5,14 @@ description: A plugin for enabling autocomplete of a text input or textarea.
 
 authors:
  - Fábio Miranda Costa
+ - Matti Schneider-Ghibaudo
 
 license: MIT-style license
 
 ...
 */
 
-.ma-container{
+.ma-container {
 	color: #000;
 	border: 1px solid #333;
 	background-color: #fff;
@@ -19,9 +20,10 @@ license: MIT-style license
 	visibility: hidden;
 	overflow-y: auto;
 	overflow-x: hidden;
+	z-index: 1000;
 }
 
-.ma-container ul{
+.ma-container ul {
 	list-style: none;
 	overflow: hidden;
 	width: 100%;
@@ -29,7 +31,7 @@ license: MIT-style license
 	padding: 0;
 }
 
-.ma-container li{
+.ma-container li {
 	padding: 2px 5px;
 	line-height: 16px;
 	cursor: pointer;
@@ -38,22 +40,22 @@ license: MIT-style license
 	overflow: hidden;
 }
 
-.ma-container .ma-hover{
+.ma-container .ma-hover {
 	color: #fff;
 	background-color: #921506 !important;
 }
 
-.ma-container .ma-odd{
+.ma-container .ma-odd {
 }
 
-.ma-container .ma-even{
+.ma-container .ma-even {
 	background-color: #efefef;
 }
 
-.ma-loading{
+.ma-loading {
 	background-color: #fafba4;
 }
 
-.ma-selected{
+.ma-selected {
 	background-color: #ccfda8;
 }
