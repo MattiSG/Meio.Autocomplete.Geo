@@ -7,18 +7,16 @@ Meio.Autocomplete.Data.Geo = new Class({
 
 	Extends: Meio.Autocomplete.Data,
 	
-	geocoder: new google.maps.Geocoder(),
+	localSearch: new GlocalSearch(),
 	
-	/**Available options, from http://code.google.com/apis/maps/documentation/javascript/reference.html#GeocoderRequest
-	*	address		string			Address. Optional.
-	*	bounds		LatLngBounds	LatLngBounds within which to search. Optional.
-	*	language	string			Preferred language for results. Optional.
-	*	location	LatLng			LatLng about which to search. Optional.
-	*	region		string			Country code top-level domain within which to search. Optional.
+	/**
+	*@param	geocoderReqOpts	a Hash that may include the following values:
+	*	location	LatLng about which to search
 	*/
 	initialize: function init(geocoderReqOpts) {
 		this._cache = new Meio.Autocomplete.Cache();
 		this.geocoderReqOpts = geocoderReqOpts; //we can't use Options because they change the prototype
+		this.localSearch.setSearchCompleteCallback(null, this.handleResults.bind(this));
 	},
 	
 	prepare: function(text){
@@ -32,52 +30,36 @@ Meio.Autocomplete.Data.Geo = new Class({
 	},
 	
 	search: function(query) {
-		var ro = this.geocoderReqOpts;
-		this.geocoder.geocode(
-			{ //we can't use $merge because it changes the subobjects' prototypes
-				address:	query,
-				bounds:		ro.bounds,
-				language:	ro.language,
-				location:	ro.location,
-				region:		ro.region
-			},
-			this.handleResults.bind(this)
-		);
+		this.localSearch.setCenterPoint(this.geocoderReqOpts.location);
+		this.localSearch.execute(query);		
 	},
 	
-	handleResults: function(results, status) {
-		var gs = google.maps.GeocoderStatus; //better compression
-	    if (status == gs.OK || status == gs.ZERO_RESULTS) {
-			this.cache(this.cachedKey, results);
-			this.data = results;
-			this.fireEvent('ready');
-	    } else {
-			throw('Geocoding failed (status: "' + status + '").');
-	    }
+	handleResults: function() {
+		var results = this.localSearch.results;
+		this.cache(this.cachedKey, results);
+		this.data = results;
+		this.fireEvent('ready');
 	}
 });
 			
 Meio.Autocomplete.Geo = new Class({
 	Extends: Meio.Autocomplete,
 		
-	/**Available options, from http://code.google.com/apis/maps/documentation/javascript/reference.html#GeocoderRequest
-	*	bounds		LatLngBounds	LatLngBounds within which to search.
-	*	language	string			Preferred language for results.
-	*	location	LatLng			LatLng about which to search.
-	*	region		string			Country code top-level domain within which to search.
+	/**
+	*@param	localSearchOptions	see Meio.Autocomplete.Data.Geo
 	*/
-	initialize: function(input, geocoderRequestOptions, options, listInstance){
-		this.geocoderRequestOptions = geocoderRequestOptions; //we can't use Options because they change the prototype
+	initialize: function(input, localSearchOptions, options, listInstance){
+		this.localSearchOptions = localSearchOptions; //we can't use Options because they change the prototype
 		options = $merge(options, {
 			filter: {
-				path: 'formatted_address'
+				path: 'titleNoFormatting'
 			}
 		});
 		this.parent(input, [], options, listInstance);
 	},
 	
 	initData: function() {
-		this.data = new Meio.Autocomplete.Data.Geo(this.geocoderRequestOptions);
+		this.data = new Meio.Autocomplete.Data.Geo(this.localSearchOptions);
 		this.data.addEvent('ready', this.dataReady.bind(this));
 	}
 });
