@@ -1,6 +1,13 @@
 /**
 *@author	Matti Schneider-Ghibaudo
 *@license	MIT-style
+*
+*@dependencies
+*	Meio.Autocomplete:		http://www.meiocodigo.com/projects/meio-autocomplete/
+*	L__ MooTools, see exact dependencies in Meio.Autocomplete
+*	Google Maps JS API:		http://code.google.com/apis/maps/documentation/javascript/reference.html#LatLng
+*		Intended for v3. Not tested with v2, but should be compatible.
+*	Google Local Search:	http://code.google.com/apis/ajaxsearch/local.html
 */
 
 Meio.Autocomplete.Data.Geo = new Class({
@@ -11,7 +18,7 @@ Meio.Autocomplete.Data.Geo = new Class({
 	
 	/**
 	*@param	geocoderReqOpts	a Hash that may include the following values:
-	*	location	LatLng about which to search
+	*	location	google.maps.LatLng or (lat, lng) array about which to search
 	*/
 	initialize: function init(geocoderReqOpts) {
 		this._cache = new Meio.Autocomplete.Cache();
@@ -19,7 +26,11 @@ Meio.Autocomplete.Data.Geo = new Class({
 		this.localSearch.setSearchCompleteCallback(null, this.handleResults.bind(this));
 	},
 	
-	prepare: function(text){
+	setLocation: function setLocation(loc) {
+		this.geocoderReqOpts.location = loc;
+	},
+	
+	prepare: function prepare(text){
 		this.cachedKey = text;
 		if (this._cache.has(this.cachedKey)) {
 			this.data = this._cache.get(this.cachedKey);
@@ -29,12 +40,12 @@ Meio.Autocomplete.Data.Geo = new Class({
 		}
 	},
 	
-	search: function(query) {
+	search: function search(query) {
 		this.localSearch.setCenterPoint(this.geocoderReqOpts.location);
 		this.localSearch.execute(query);		
 	},
 	
-	handleResults: function() {
+	handleResults: function handleResults() {
 		var results = this.localSearch.results;
 		this.cache(this.cachedKey, results);
 		this.data = results;
@@ -58,8 +69,12 @@ Meio.Autocomplete.Geo = new Class({
 		this.parent(input, [], options, listInstance);
 	},
 	
-	initData: function() {
+	initData: function initData() {
 		this.data = new Meio.Autocomplete.Data.Geo(this.localSearchOptions);
 		this.data.addEvent('ready', this.dataReady.bind(this));
+	},
+	
+	setLocation: function setLocation(loc) {
+		this.data.setLocation(loc);
 	}
 });
