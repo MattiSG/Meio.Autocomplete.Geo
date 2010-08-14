@@ -37,7 +37,19 @@
 		
 		<script type="text/javascript">
 		//<![CDATA[
-			new Meio.Autocomplete.Geo('form_school', ['test', 'test2']);
+			var latlng1 = new google.maps.LatLng(43.62538544065392, 7.011492675781259);
+			var latlng2 = new google.maps.LatLng(43.5895879439408, 7.104876464843759);
+			var bounds = new google.maps.LatLngBounds();
+			bounds.extend(latlng1);
+			bounds.extend(latlng2);
+
+			var geopleter = new Meio.Autocomplete.Geo('form_school', {
+				region: 'fr',
+				bounds: bounds,
+				location: new google.maps.LatLng(43.62028086118892, 7.043044841527948)
+			}, {
+				delay: 0
+			});
 		//]]>
 		</script>
 	</body>
