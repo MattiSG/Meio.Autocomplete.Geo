@@ -1,0 +1,12 @@
+/**Stylesheet for the demo of the Meio.Autocomplete.Geo plugin.
+*@author	Matti Schneider-Ghibaudo
+*/
+
+form li {
+	width: 30em;
+}
+
+form li * {
+	display: inline-block;
+	width: 30%;
+}
