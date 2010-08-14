@@ -7,6 +7,7 @@ How to use
 ----------
 
 First of all, you need to include all dependencies:
+
 *	[MooTools](http://mootools.net/download) of course, see exact dependencies in [Meio.Autocomplete](http://www.meiocodigo.com/projects/meio-autocomplete/)
 *	[Meio.Autocomplete](http://www.meiocodigo.com/projects/meio-autocomplete/) itself
 *	[Google Maps JS API](http://code.google.com/apis/maps/documentation/javascript/)
