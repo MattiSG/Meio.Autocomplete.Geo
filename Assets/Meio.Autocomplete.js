@@ -106,6 +106,25 @@ provides: [Meio.Autocomplete]
 		
 		Extends: Meio.Widget,
 		
+		/**The following events can be fired by this class:
+		*noItemToList(elements)
+		*	Fired by onkeypress when there are no options to list.
+		*	@param	elements	Hash	A Hash containing the ‘field’ and ‘list’ instances.
+		*	
+		*select(elements, value)
+		*	Fires when the user selects a suggestion.
+		*	@param	elements	Hash	A Hash containing the ‘field’ and ‘list’ instances.
+		*	@param	value		mixed	The value associated with the option that has been selected.
+		*
+		*deselect
+		*	Fired when the user deselects a suggestion.
+		*	@param	elements	Hash	A Hash containing the ‘field’ and ‘list’ instances.
+		*
+		*highlight(elements, value)
+		*	Fired when the user highlights a suggestion, either by hovering over it or by selecting it through keystrokes.
+		*	@param	elements	Hash	A Hash containing the ‘field’ and ‘list’ instances.
+		*	@param	value		object or null	The currently highlighted value. Null if the event is actually a deselection (i.e. list gets hidden).
+		*/
 		Implements: [Options, Events],
 		
 		options: {
