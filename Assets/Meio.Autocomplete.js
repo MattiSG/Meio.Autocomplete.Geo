@@ -685,19 +685,8 @@ provides: [Meio.Autocomplete]
 		},
 		
 		scrollFocusedItem: function(direction){
-			var focusedItemCoordinates = this.focusedItem.getCoordinates(this.list),
-				scrollTop = this.node.scrollTop;
-			if (direction == 'down'){
-				var delta = focusedItemCoordinates.bottom - this.node.getStyle('height').toInt();
-				if ((delta - scrollTop) > 0){
-					this.node.scrollTop = delta;
-				}
-			} else {
-				var top = focusedItemCoordinates.top;
-				if (scrollTop && scrollTop > top){
-					this.node.scrollTop = top;
-				}
-			}
+			var pos = this.focusedItem.getPosition(this.container);
+			this.container.scrollTo(pos.x, pos.y);
 		},
 		
 		getItemFromEvent: function(e){
@@ -711,9 +700,10 @@ provides: [Meio.Autocomplete]
 		
 		render: function(){
 			var node = new Element('div', {'class': this.options.classes.container});
+			this.container = node;
 			if (node.bgiframe) node.bgiframe({top: 0, left: 0});
 			this.list = new Element('ul').inject(node);
-			$(document.body).grab(node);
+			document.body.grab(node);
 			return node;
 		},
 		
@@ -855,7 +845,7 @@ provides: [Meio.Autocomplete]
 					self.element.removeClass('loading');
 				},
 				success: function(jsonResponse){
-					self.data = self.options.formatResponse(jsonResponse); //TODO: use cache? or is it stored somewhere else?
+					self.data = self.options.formatResponse(jsonResponse);
 					self.fireEvent('ready');
 				}
 			});

@@ -54,6 +54,7 @@
 				location: new google.maps.LatLng(43.62028086118892, 7.043044841527948)
 			}, {
 				delay: 100,
+				maxVisibleItems: 4,
 				onSelect: function(elements, value) {
 					['lat', 'lng', 'city'].each(function(prop) {
 						$('form_' + prop).set('value', value[prop].toLowerCase().capitalize());
