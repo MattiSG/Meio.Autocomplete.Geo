@@ -14,15 +14,21 @@ Meio.Autocomplete.Data.Geo = new Class({
 
 	Extends: Meio.Autocomplete.Data,
 	
+	/**Google Local Search AJAX API
+	*See http://www.google.com/uds/solutions/localsearch/reference.html
+	*/
 	localSearch: new GlocalSearch(),
 	geocoderReqOpts: {},
+	/**Since the cache is global, we have to prefix keys to be sure that they won't be used somewhere else.
+	*/
+	cachePrefix: '_geo_',
 	
 	/**
 	*@param	geocoderReqOpts	a Hash that may include the following values:
 	*	location	google.maps.LatLng or (lat, lng) array about which to search
 	*/
-	initialize: function init(geocoderReqOpts) {
-		this._cache = new Meio.Autocomplete.Cache();
+	initialize: function init(geocoderReqOpts, cache) {
+		this._cache = cache;
 		this.setLocation(geocoderReqOpts.location || ''); //we can't use Options because they change the prototype
 		this.localSearch.setSearchCompleteCallback(null, this.handleResults.bind(this));
 	},
@@ -31,19 +37,23 @@ Meio.Autocomplete.Data.Geo = new Class({
 		this.geocoderReqOpts.location = loc || '';
 	},
 	
-	prepare: function prepare(text){
-		this.cachedKey = text;
+	prepare: function prepare(query){
+		this.cachedKey = this.cachePrefix + query;
 		if (this._cache.has(this.cachedKey)) {
 			this.data = this._cache.get(this.cachedKey);
 			this.fireEvent('ready');
 		} else {
-			this.search(this.cachedKey);
+			this.search(query);
 		}
 	},
 	
 	search: function search(query) {
 		this.localSearch.setCenterPoint(this.geocoderReqOpts.location);
 		this.localSearch.execute(query);		
+	},
+	
+	cache: function cache(key, value) {
+		this.parent(this.cachePrefix + key, value);
 	},
 	
 	handleResults: function handleResults() {
@@ -71,7 +81,7 @@ Meio.Autocomplete.Geo = new Class({
 	},
 	
 	initData: function initData() {
-		this.data = new Meio.Autocomplete.Data.Geo(this.localSearchOptions);
+		this.data = new Meio.Autocomplete.Data.Geo(this.localSearchOptions, this.cache);
 		this.data.addEvent('ready', this.dataReady.bind(this));
 	},
 	
