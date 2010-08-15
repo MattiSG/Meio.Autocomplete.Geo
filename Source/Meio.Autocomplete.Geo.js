@@ -20,8 +20,15 @@ Meio.Autocomplete.Data.Geo = new Class({
 	localSearch: new GlocalSearch(),
 	geocoderReqOpts: {},
 	/**Since the cache is global, we have to prefix keys to be sure that they won't be used somewhere else.
+	*@private
 	*/
-	cachePrefix: '_geo_',
+	cachePrefix: '', //this is different from options.cachePrefix, and will be updated. Do not use, it's _private_!!
+	
+	options: {
+		/**Prefix used in the global cache for cached data of this Data instance.
+		*/
+		cachePrefix: '_geo_',
+	},
 	
 	/**
 	*@param	geocoderReqOpts	a Hash that may include the following values:
@@ -29,12 +36,13 @@ Meio.Autocomplete.Data.Geo = new Class({
 	*/
 	initialize: function init(geocoderReqOpts, cache) {
 		this._cache = cache;
-		this.setLocation(geocoderReqOpts.location || ''); //we can't use Options because they change the prototype
+		this.setLocation(geocoderReqOpts.location); //we can't use Options because they change the prototype
 		this.localSearch.setSearchCompleteCallback(null, this.handleResults.bind(this));
 	},
 	
 	setLocation: function setLocation(loc) {
 		this.geocoderReqOpts.location = loc || '';
+		this.cachePrefix = this.options.cachePrefix + this.geocoderReqOpts.location; //we can't refresh the cache on location change since it is global, and we can't have our own cache otherwise we won't honor Meio.Autocomplete.refreshCache()
 	},
 	
 	prepare: function prepare(query){
