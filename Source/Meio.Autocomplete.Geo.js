@@ -22,6 +22,7 @@ Meio.Autocomplete.Data.Geo = new Class({
 	/**Since the cache is global, we have to prefix keys to be sure that they won't be used somewhere else.
 	*@private
 	*/
+	//TODO: use a sub-hash. Support needs to be implemented in Meio.Autocomplete first though.
 	cachePrefix: '', //this is different from options.cachePrefix, and will be updated. Do not use, it's _private_!!
 	
 	options: {
