@@ -327,13 +327,13 @@ provides: [Meio.Autocomplete]
 		
 		setInputValue: function(){
 			var list = this.elements.list;
+			list.hide(); //before the rest because we want the 'select' event to be fired _after_ the 'highlight(null)' event
 			if (list.focusedItem){
 				var text = list.focusedItem.get('title');
 				this.elements.field.node.set('value', text);
 				var index = list.focusedItem.get('data-index');
 				this.fireEvent('select', [this.elements, this.itemsData[index], text, index]);
 			}
-			list.hide();
 		},
 		
 		focusItem: function(direction){
