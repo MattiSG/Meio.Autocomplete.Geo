@@ -5,9 +5,7 @@
 *@dependencies
 *	Meio.Autocomplete:		http://www.meiocodigo.com/projects/meio-autocomplete/
 *	L__ MooTools, see exact dependencies in Meio.Autocomplete
-*	Google Maps JS API:		http://code.google.com/apis/maps/documentation/javascript/reference.html#LatLng
-*		Intended for v3. Not tested with v2, but should be compatible.
-*	Google Local Search:	http://code.google.com/apis/ajaxsearch/local.html
+*	Google Maps JS API v3:	http://code.google.com/apis/maps/documentation/javascript/reference.html
 */
 
 Meio.Autocomplete.Data.Geo = new Class({
@@ -17,7 +15,7 @@ Meio.Autocomplete.Data.Geo = new Class({
 	/**Google Local Search AJAX API
 	*See http://www.google.com/uds/solutions/localsearch/reference.html
 	*/
-	localSearch: new GlocalSearch(),
+	geocoder: new google.maps.Geocoder(),
 	geocoderReqOpts: {},
 	/**Since the cache is global, we have to prefix keys to be sure that they won't be used somewhere else.
 	*@private
@@ -37,13 +35,12 @@ Meio.Autocomplete.Data.Geo = new Class({
 	*/
 	initialize: function init(geocoderReqOpts, cache) {
 		this._cache = cache;
-		this.setLocation(geocoderReqOpts.location); //we can't use Options because they change the prototype
-		this.localSearch.setSearchCompleteCallback(null, this.handleResults.bind(this));
+		this.setBounds(geocoderReqOpts.bounds); //we can't use Options because they change the prototype
 	},
 	
-	setLocation: function setLocation(loc) {
-		this.geocoderReqOpts.location = loc || '';
-		this.cachePrefix = this.options.cachePrefix + this.geocoderReqOpts.location; //we can't refresh the cache on location change since it is global, and we can't have our own cache otherwise we won't honor Meio.Autocomplete.refreshCache()
+	setBounds: function setBounds(latLngBounds) {
+		this.geocoderReqOpts.bounds = latLngBounds;
+		this.cachePrefix = this.options.cachePrefix + latLngBounds; //we can't refresh the cache on location change since it is global, and we can't have our own cache otherwise we won't honor Meio.Autocomplete.refreshCache()
 	},
 	
 	prepare: function prepare(query){
@@ -57,19 +54,32 @@ Meio.Autocomplete.Data.Geo = new Class({
 	},
 	
 	search: function search(query) {
-		this.localSearch.setCenterPoint(this.geocoderReqOpts.location);
-		this.localSearch.execute(query);		
+		var ro = this.geocoderReqOpts;
+		this.geocoder.geocode(
+			{ //we can't use $merge because it changes the subobjects' prototypes
+				address:	query,
+				bounds:		ro.bounds,
+				language:	ro.language,
+				location:	ro.location,
+				region:		ro.region
+			},
+			this.handleResults.bind(this)
+		);
 	},
 	
 	cache: function cache(key, value) {
 		this.parent(this.cachePrefix + key, value);
 	},
 	
-	handleResults: function handleResults() {
-		var results = this.localSearch.results;
-		this.cache(this.cachedKey, results);
-		this.data = results;
-		this.fireEvent('ready');
+	handleResults: function handleResults(results, status) {
+		var gs = google.maps.GeocoderStatus; //better compression
+		if (status == gs.OK || status == gs.ZERO_RESULTS) {
+			this.cache(this.cachedKey, results);
+			this.data = results;
+			this.fireEvent('ready');
+		} else {
+			throw('Geocoding failed (status: "' + status + '").');
+		}
 	}
 });
 			
@@ -77,24 +87,25 @@ Meio.Autocomplete.Geo = new Class({
 	Extends: Meio.Autocomplete,
 		
 	/**
-	*@param	localSearchOptions	see Meio.Autocomplete.Data.Geo
+	*@param	geocoderReqOpts	see Meio.Autocomplete.Data.Geo
 	*/
-	initialize: function(input, localSearchOptions, options, listInstance){
-		this.localSearchOptions = localSearchOptions; //we can't use Options because they change the prototype
+	initialize: function(input, geocoderReqOpts, options, listInstance){
+		this.geocoderReqOpts = geocoderReqOpts; //we can't use Options because they change the prototype
 		options = $merge(options, {
 			filter: {
-				path: 'titleNoFormatting'
+				path: 'formatted_address'
 			}
 		});
 		this.parent(input, [], options, listInstance);
 	},
 	
 	initData: function initData() {
-		this.data = new Meio.Autocomplete.Data.Geo(this.localSearchOptions, this.cache);
+		this.data = new Meio.Autocomplete.Data.Geo(this.geocoderReqOpts, this.cache);
 		this.data.addEvent('ready', this.dataReady.bind(this));
 	},
 	
-	setLocation: function setLocation(loc) {
-		this.data.setLocation(loc);
+	setBounds: function setBounds(bounds) {
+		this.data.setBounds(bounds);
 	}
 });
+
