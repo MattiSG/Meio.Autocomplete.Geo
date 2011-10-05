@@ -608,7 +608,7 @@ provides: [Meio.Autocomplete]
 			this.parent(field);
 			
 			$(global).addEvent('unload', function(){
-				if (this.node) this.node.set('autocomplete', 'on'); // if autocomplete is off when you reload the page the input value gets erased
+				if (this.node) $(this.node).set('autocomplete', 'on'); // if autocomplete is off when you reload the page the input value gets erased
 			}.bind(this));
 		},
 		
@@ -730,7 +730,7 @@ provides: [Meio.Autocomplete]
 			this.container = node;
 			if (node.bgiframe) node.bgiframe({top: 0, left: 0});
 			this.list = new Element('ul').inject(node);
-			document.body.grab(node);
+			$(document.body).grab(node);
 			return node;
 		},
 		
