@@ -27,7 +27,7 @@ Meio.Autocomplete.Data.Local = new Class({
 	options: {
 		/**Prefix used in the global cache for cached data of this Data instance.
 		*/
-		cachePrefix: '_geo_',
+		cachePrefix: '_geo_'
 	},
 	
 	/**
